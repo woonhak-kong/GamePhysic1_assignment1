@@ -32,6 +32,10 @@ PlayScene::~PlayScene()
 
 void PlayScene::draw()
 {
+	TextureManager::Instance().drawBySize("bg", 0, 0, 1280, 720);
+	TextureManager::Instance().drawBySize("bg2", 0, 600, 1280, 120);
+
+
 	SDL_SetRenderDrawColor(Renderer::Instance().getRenderer(), 0, 255, 0, 255);
 	float lineLength = 500;
 	SDL_RenderDrawLineF(Renderer::Instance().getRenderer(), m_startingX, m_startingY, m_startingX + m_orientation.x * lineLength, m_startingY + m_orientation.y * lineLength);
@@ -148,6 +152,12 @@ void PlayScene::start()
 {
 	// Set GUI Title
 	m_guiTitle = "Play Scene";
+
+	TextureManager::Instance().load("../Assets/textures/bg1.png", "bg");
+	TextureManager::Instance().load("../Assets/textures/bg2.png", "bg2");
+
+
+
 
 	// Plane Sprite
 	m_pBall= new Ball();
