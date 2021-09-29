@@ -42,6 +42,15 @@ private:
 
 	bool m_isStart;
 
+	Label* m_positionLabel;
+	Label* m_speedLabel;
+	Label* m_velocityLabel;
+	Label* m_accelerationLabel;
+	Label* m_timeLabel;
+	Label* m_angleLabel;
+
+
+
 
 private:
 	void reset();

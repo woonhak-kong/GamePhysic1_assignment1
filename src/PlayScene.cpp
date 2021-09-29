@@ -1,6 +1,8 @@
 #include "PlayScene.h"
 #include "Game.h"
 #include "EventManager.h"
+#include <sstream>
+#include <iomanip>
 
 // required for IMGUI
 #include "imgui.h"
@@ -42,7 +44,7 @@ void PlayScene::draw()
 
 
 	SDL_SetRenderDrawColor(Renderer::Instance().getRenderer(), 0, 0, 255, 255);
-	SDL_RenderDrawLineF(Renderer::Instance().getRenderer(), m_startingX - 300, m_startingY, m_startingX + 1500, m_startingY);
+	SDL_RenderDrawLineF(Renderer::Instance().getRenderer(), m_startingX - 1500, m_startingY, m_startingX + 1500, m_startingY);
 
 
 
@@ -110,6 +112,34 @@ void PlayScene::update()
 
 
 	}
+	std::stringstream string;
+	string << std::fixed<< std::setprecision(2) << "Posision : (" << m_pBall->getTransform()->position.x << ", "
+		<< m_pBall->getTransform()->position.y << ")";
+	m_positionLabel->setText(string.str());
+
+	string.str("");
+	string << std::fixed << std::setprecision(2) << "Luanch Speed : " << m_launchSpeed ;
+	m_speedLabel->setText(string.str());
+
+	// calculating velocity
+	float velocityX = m_isStart ? m_velocity.x : 0;
+	float velocityY = m_isStart ? m_velocity.y + m_accelerationGravity.y * m_playTime : 0;
+	string.str("");
+	string << std::fixed << std::setprecision(2) << "Velocity : (" << velocityX << ", " << velocityY << ")";
+	m_velocityLabel->setText(string.str());
+
+
+	string.str("");
+	string << std::fixed << std::setprecision(2) << "Acceleration : " << "(" << m_accelerationGravity.x << ", " << m_accelerationGravity.y << ")";
+	m_accelerationLabel->setText(string.str());
+
+	string.str("");
+	string << std::fixed << std::setprecision(2) << "Time : " << m_playTime;
+	m_timeLabel->setText(string.str());
+
+	string.str("");
+	string << std::fixed << std::setprecision(2) << "Angle : " << m_launchElevationAngle;
+	m_angleLabel->setText(string.str());
 
 
 	updateDisplayList();
@@ -141,11 +171,11 @@ void PlayScene::handleEvents()
 		TheGame::Instance().changeSceneState(END_SCENE);
 	}
 
-	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_SPACE))
-	{
-		reset();
-		m_isStart = true;
-	}
+	//if (EventManager::Instance().isKeyDown(SDL_SCANCODE_SPACE))
+	//{
+	//	reset();
+	//	m_isStart = true;
+	//}
 }
 
 void PlayScene::start()
@@ -155,6 +185,27 @@ void PlayScene::start()
 
 	TextureManager::Instance().load("../Assets/textures/bg1.png", "bg");
 	TextureManager::Instance().load("../Assets/textures/bg2.png", "bg2");
+
+	const SDL_Color blue = { 0, 255, 255, 255 };
+	float yCoor = 30.f;
+	m_positionLabel = new Label("", "Consolas", 20, blue, glm::vec2(900.0f, yCoor += 20));
+	m_positionLabel->setParent(this);
+	addChild(m_positionLabel);
+	m_speedLabel = new Label("", "Consolas", 20, blue, glm::vec2(900.0f, yCoor += 20));
+	m_speedLabel->setParent(this);
+	addChild(m_speedLabel);
+	m_velocityLabel = new Label("", "Consolas", 20, blue, glm::vec2(900.0f, yCoor += 20));
+	m_velocityLabel->setParent(this);
+	addChild(m_velocityLabel);
+	m_accelerationLabel = new Label("", "Consolas", 20, blue, glm::vec2(900.0f, yCoor += 20));
+	m_accelerationLabel->setParent(this);
+	addChild(m_accelerationLabel);
+	m_timeLabel = new Label("", "Consolas", 20, blue, glm::vec2(900.0f, yCoor += 20));
+	m_timeLabel->setParent(this);
+	addChild(m_timeLabel);
+	m_angleLabel = new Label("", "Consolas", 20, blue, glm::vec2(900.0f, yCoor += 20));
+	m_angleLabel->setParent(this);
+	addChild(m_angleLabel);
 
 
 
@@ -185,7 +236,7 @@ void PlayScene::GUI_Function()
 	ImGui::Begin("Setting values", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoMove);
 
 
-	if (ImGui::Button("Launch"))
+	if (ImGui::Button("Activate"))
 	{
 		reset();
 		m_isStart = true;
@@ -195,10 +246,10 @@ void PlayScene::GUI_Function()
 	//	//m_startingX = startingX;
 	//	m_pBall->getTransform()->position.x = m_startingX;
 	//}
-	if(ImGui::SliderFloat("GroundPosition", &m_startingY, 0.f, 720.f))
+	if(ImGui::SliderFloat("GroundPosition", &m_startingX, 0.f, 1280.f))
 	{
 		//m_startingY = startingY;
-		m_pBall->getTransform()->position.y = m_startingY;
+		m_pBall->getTransform()->position.x = m_startingX;
 	}
 	if(ImGui::SliderFloat("Launch Speed", &m_launchSpeed, 10.f, 200.f))
 	{
