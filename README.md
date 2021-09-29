@@ -1,4 +1,4 @@
-# GamePhysics1 Lab3
+### GamePhysics1 Assignment1
 
-### change to x86
-###  Game2005_Lab_3
+## change to x86
+# This is for Game Physics1 asssignment1
