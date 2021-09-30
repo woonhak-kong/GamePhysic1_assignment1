@@ -69,6 +69,7 @@ void PlayScene::draw()
 
 
 
+	// V(f) = V(i) + at
 	// a is always 0;
 	// so, 0 + bT + cT^2 = 0;
 	// T(b+cT) = 0;
@@ -104,6 +105,9 @@ void PlayScene::update()
 		m_playTime += t;
 		//std::cout << t << std::endl;
 
+
+		// kinemetic equation
+		// Displacement = D(i) + vt + 1/2at^2
 		m_pBall->getTransform()->position.x = m_startingX + m_velocity.x * m_playTime
 			+ (0.5f * m_accelerationGravity.x * (m_playTime * m_playTime));
 
@@ -259,6 +263,7 @@ void PlayScene::GUI_Function()
 	}
 	if(ImGui::SliderFloat("Angle Y", &m_launchElevationAngle, -90.f, 90.f))
 	{
+		// for calculating launch velocity
 		m_orientation.x = glm::cos(m_launchElevationAngle * Util::Deg2Rad);
 		m_orientation.y = -glm::sin(m_launchElevationAngle * Util::Deg2Rad);
 		m_velocity.x = m_orientation.x * m_launchSpeed;
